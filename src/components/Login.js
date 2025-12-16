@@ -1,11 +1,59 @@
-import React, { useState } from 'react'
+import React, { useState ,useRef} from 'react'
 import Header from './Header'
+import checkValidation from "../utils/validate";
+import {createUserWithEmailAndPassword } from "firebase/auth";
+import {signInWithEmailAndPassword } from "firebase/auth";
+import {auth} from "../utils/firebase";
 
 
 const Login = () => {
   const[signin,setsignin]=useState(true)
+  const [errorMessage,seterrorMessage]=useState();
   const handleClick=()=>{
      setsignin(!signin)
+  }
+  const email=useRef()
+  const password=useRef()
+  const handleForm=()=>{
+ 
+  const message=checkValidation(email.current.value,password.current.value)
+  seterrorMessage(message)
+
+  if(message) return;
+
+  //sign in/sign up
+ if(!signin){
+  //sign up
+  createUserWithEmailAndPassword(auth, email.current.value,password.current.value )
+  .then((userCredential) => {
+    // Signed up 
+    const user = userCredential.user;
+    console.log(user);
+    // ...
+  })
+  .catch((error) => {
+    const errorCode = error.code;
+    const errorMessage = error.message;
+    seterrorMessage(errorCode+"-"+errorMessage)
+    // ..
+  });
+
+ }else{
+  //sign in
+   signInWithEmailAndPassword(auth,email.current.value,password.current.value)
+  .then((userCredential) => {
+    // Signed in 
+    const user = userCredential.user;
+     console.log(user);
+    // ...
+  })
+  .catch((error) => {
+    const errorCode = error.code;
+    const errorMessage = error.message;
+    seterrorMessage(errorCode+"-"+errorMessage)
+  });
+ }
+
   }
   return (
     <div>
@@ -20,13 +68,14 @@ const Login = () => {
         
         height: "100vh",
       }} ></div>
-      <form className='w-3/12 absolute top-[27%] left-[38%] bg-black text-white pb-5 pt-3 bg-opacity-80'>
+      <form onSubmit={(e)=>e.preventDefault()} className='w-3/12 absolute top-[27%] left-[38%] bg-black text-white pb-5 pt-3 bg-opacity-80'>
       <h1 className='font-bold text-3xl px-2 py-2 pb-4'>{signin?"Sign In":"Sign Up"}</h1>
      {!signin &&  <input type='text' placeholder='Full Name' className='p-2 m-2 w-[95%] mb-4 bg-gray-500' />}
       {!signin &&  <input type='number' placeholder='Phone No' className='p-2 m-2 w-[95%] mb-4 bg-gray-500' />}
-              <input type='text' placeholder='Email Address' className='p-2 m-2 w-[95%] mb-4 bg-gray-500' />
-      <input type='password' placeholder='Password' className='p-2 m-2 w-[95%] mb-4 bg-gray-500' />
-       <button className='p-4 m-2.5  bg-red-700 w-[95%]'>{signin?"Sign In":"Sign Up"}</button>
+              <input ref={email} type='text' placeholder='Email Address' className='p-2 m-2 w-[95%] mb-4 bg-gray-500' />
+      <input ref={password} type='password' placeholder='Password' className='p-2 m-2 w-[95%] mb-4 bg-gray-500' />
+      <h1 className='text-red-600 pl-4' >{errorMessage}</h1>
+       <button className='p-4 m-2.5  bg-red-700 w-[95%]' onClick={handleForm} >{signin?"Sign In":"Sign Up"}</button>
        <p className='pl-2 cursor-pointer' onClick={handleClick}>{signin?"New to Netflix?Sign Up Now":"Already registered Sign In"}</p>
    
   
