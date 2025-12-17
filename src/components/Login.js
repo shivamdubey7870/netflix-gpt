@@ -1,19 +1,22 @@
 import React, { useState ,useRef} from 'react'
 import Header from './Header'
 import checkValidation from "../utils/validate";
-import {createUserWithEmailAndPassword } from "firebase/auth";
+import {createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import {signInWithEmailAndPassword } from "firebase/auth";
 import {auth} from "../utils/firebase";
+import { useNavigate } from 'react-router-dom';
 
 
 const Login = () => {
   const[signin,setsignin]=useState(true)
   const [errorMessage,seterrorMessage]=useState();
+  const navigate=useNavigate();
   const handleClick=()=>{
      setsignin(!signin)
   }
   const email=useRef()
   const password=useRef()
+  const name=useRef()
   const handleForm=()=>{
  
   const message=checkValidation(email.current.value,password.current.value)
@@ -28,7 +31,16 @@ const Login = () => {
   .then((userCredential) => {
     // Signed up 
     const user = userCredential.user;
-    console.log(user);
+    updateProfile(auth.currentUser, {
+  displayName: name.current.value, photoURL: "https://example.com/jane-q-user/profile.jpg"
+}).then(() => {
+  // Profile updated!
+  // ...
+}).catch((error) => {
+  // An error occurred
+  // ...
+});
+      navigate("/browse")
     // ...
   })
   .catch((error) => {
@@ -44,7 +56,7 @@ const Login = () => {
   .then((userCredential) => {
     // Signed in 
     const user = userCredential.user;
-     console.log(user);
+      navigate("/browse")
     // ...
   })
   .catch((error) => {
