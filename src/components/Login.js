@@ -4,13 +4,13 @@ import checkValidation from "../utils/validate";
 import {createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import {signInWithEmailAndPassword } from "firebase/auth";
 import {auth} from "../utils/firebase";
-import { useNavigate } from 'react-router-dom';
+
 
 
 const Login = () => {
   const[signin,setsignin]=useState(true)
   const [errorMessage,seterrorMessage]=useState();
-  const navigate=useNavigate();
+  
   const handleClick=()=>{
      setsignin(!signin)
   }
@@ -40,7 +40,7 @@ const Login = () => {
   // An error occurred
   // ...
 });
-      navigate("/browse")
+      
     // ...
   })
   .catch((error) => {
@@ -56,7 +56,7 @@ const Login = () => {
   .then((userCredential) => {
     // Signed in 
     const user = userCredential.user;
-      navigate("/browse")
+    
     // ...
   })
   .catch((error) => {

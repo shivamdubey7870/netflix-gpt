@@ -1,24 +1,54 @@
-import { signOut } from "firebase/auth";
-import React from "react";
+import { onAuthStateChanged, signOut } from "firebase/auth";
+import React, { useEffect } from "react";
 import { auth } from "../utils/firebase";
 import { useNavigate } from "react-router-dom";
+import { addUser, removeUser } from "../utils/appSlice";
+import { useDispatch } from "react-redux";
 
 const Header = () => {
   const navigate=useNavigate()
+  const dispatch=useDispatch()
   const handleSignOut=()=>{
     signOut(auth).then(() => {
-     navigate("/")
+     
 }).catch((error) => {
   // An error happened.
 });
   }
+    useEffect(() => {
+      const unsubscribe= onAuthStateChanged(auth, (user) => {
+        if (user) {
+          const { uid, email, displayName } = user;
+  
+          dispatch(
+            addUser({
+              uid,
+              email,
+              displayName,
+            })
+          );
+          navigate("/browse")
+         
+        } else {
+         dispatch(removeUser())
+         navigate("/")
+        
+        }
+      });
+  
+      // cleanup
+      return()=> unsubscribe();
+      
+    }, []);
+  
   return (
-    <header className="flex justify-between bg-gradient-to-b  from-black pb-6">
+   <div className=" w-screen absolute flex justify-between bg-gradient-to-r from-black">
 
-     
+
+     <div>
       <a className="red" href="/">
         <svg
-          className="fill-red-700 w-44 absolute px-8 py-6 "
+          className="fill-red-700 w-44  px-8 py-6 bg-gradient-to-r from-black"
           viewBox="0 0 111 30"
           version="1.1"
           xmlns="http://www.w3.org/2000/svg"
@@ -31,12 +61,15 @@ const Header = () => {
           </g>
         </svg>
       </a>
-     
-      <div className="mt-4 flex flex-row gap-4 mr-8">
-          <img src="https://net20.cc/img/user-account2.png" alt=""/>
-          <button className="font-bold" onClick={handleSignOut}>(Sign Out)</button>
       </div>
-    </header>
+      <div className="mt-4 flex gap-4 mr-8 w-screen absolute left-[1170px] text-black">
+
+          <img src="https://net20.cc/img/user-account2.png" alt=""/>
+          <button className="font-bold text-white" onClick={handleSignOut}>(Sign Out)</button>
+      </div>
+      </div>
+      
+ 
   );
 };
 
