@@ -48,7 +48,7 @@ const Header = () => {
      <div>
       <a className="red" href="/">
         <svg
-          className="fill-red-700 w-44  px-8 py-6 bg-gradient-to-r from-black"
+          className="fill-red-700 w-44  px-8 py-6"
           viewBox="0 0 111 30"
           version="1.1"
           xmlns="http://www.w3.org/2000/svg"
