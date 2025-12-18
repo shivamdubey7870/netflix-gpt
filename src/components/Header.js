@@ -42,7 +42,8 @@ const Header = () => {
     }, []);
   
   return (
-   <div className=" w-screen absolute flex justify-between bg-gradient-to-r from-black">
+   <div className="w-full fixed top-0 z-50 flex justify-between bg-gradient-to-r from-black">
+
 
 
      <div>
