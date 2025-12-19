@@ -1,11 +1,14 @@
 import { onAuthStateChanged, signOut } from "firebase/auth";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { auth } from "../utils/firebase";
 import { useNavigate } from "react-router-dom";
 import { addUser, removeUser } from "../utils/appSlice";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { toggleGPTSearchView } from "../utils/gptSlice";
 
 const Header = () => {
+  // const [search,setSearch]=useState("GPT Search");
+  const showgptSearch=useSelector((store)=>store.gpt.showGptSearch)
   const navigate=useNavigate()
   const dispatch=useDispatch()
   const handleSignOut=()=>{
@@ -40,6 +43,11 @@ const Header = () => {
       return()=> unsubscribe();
       
     }, []);
+    const handleGptSearch=()=>{
+      //Toggle GPT Search
+      dispatch(toggleGPTSearchView())
+
+    }
   
   return (
    <div className="w-full fixed top-0 z-50 flex justify-between bg-gradient-to-r from-black">
@@ -63,10 +71,12 @@ const Header = () => {
         </svg>
       </a>
       </div>
-      <div className="mt-4 flex gap-4 mr-8 w-screen absolute left-[1170px] text-black">
-
+      <div className="mt-4 flex gap-4 mr-8 w-screen absolute left-[1050px] text-black">
+    
+         <button className="py-2 px-4 m-2 bg-purple-800 text-white rounded-lg" onClick={handleGptSearch}>{showgptSearch?"Home Page":"GPT Search"}</button>
           <img src="https://net20.cc/img/user-account2.png" alt=""/>
           <button className="font-bold text-white" onClick={handleSignOut}>(Sign Out)</button>
+
       </div>
       </div>
       

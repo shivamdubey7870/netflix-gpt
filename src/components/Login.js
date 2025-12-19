@@ -79,7 +79,7 @@ const Login = () => {
         backgroundPosition: "center",
         
         height: "100vh",
-      }} ></div>
+      }} >
       <form onSubmit={(e)=>e.preventDefault()} className='w-3/12 absolute top-[27%] left-[38%] bg-black text-white pb-5 pt-3 bg-opacity-80'>
       <h1 className='font-bold text-3xl px-2 py-2 pb-4'>{signin?"Sign In":"Sign Up"}</h1>
      {!signin &&  <input type='text' placeholder='Full Name' className='p-2 m-2 w-[95%] mb-4 bg-gray-500' />}
@@ -92,6 +92,7 @@ const Login = () => {
    
   
       </form>
+    </div>
     </div>
   )
 }
