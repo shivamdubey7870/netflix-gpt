@@ -9,7 +9,7 @@ const GptSearchBar = () => {
     const handleGptSearchClick= async()=>{
       //Make an api call to openAI and get movie result
       const completion = await openAi.chat.completions.create({
-  model: 'gpt-4o',
+  model: 'gpt-5-mini',
   messages: [
     { role: 'developer', content: 'Talk like a pirate.' },
     { role: 'user', content: searchText.current.value },
