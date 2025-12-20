@@ -10,6 +10,7 @@ const usePopularMovie=()=>{
 
 
     const json=await data.json();
+    
    
     
     dispatch(addPopularMovies(json.results))

@@ -19,7 +19,7 @@ const Header = () => {
 });
   }
     useEffect(() => {
-      const unsubscribe= onAuthStateChanged(auth, (user) => {
+      const unsubscribe = onAuthStateChanged(auth, (user) => {
         if (user) {
           const { uid, email, displayName } = user;
   
@@ -31,10 +31,14 @@ const Header = () => {
             })
           );
           navigate("/browse")
+          
          
         } else {
          dispatch(removeUser())
          navigate("/")
+         
+        
+
         
         }
       });
